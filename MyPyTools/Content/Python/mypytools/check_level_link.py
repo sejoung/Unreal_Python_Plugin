@@ -8,9 +8,13 @@ ROOT_PATH = "C:/logs"
 # 로그 파일 저장 경로
 LOG_FILE = os.path.join(ROOT_PATH, "broken_static_mesh_and_materials.txt")
 
-mkdir(ROOT_PATH)
+if not os.path.exists(ROOT_PATH):
+    mkdir(ROOT_PATH)
 
-actors = unreal.EditorLevelLibrary.get_all_level_actors()
+eas = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+
+actors = eas.get_all_level_actors()
+
 # 파일 열기 (쓰기 모드, UTF-8 인코딩)
 with open(LOG_FILE, "w", encoding="utf-8") as log_file:
     for actor in actors:
