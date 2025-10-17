@@ -1,15 +1,18 @@
 import unreal
 
+
 def _get_viewport_cam():
+    unreal.log("asd")
     loc, rot = unreal.EditorLevelLibrary.get_level_viewport_camera_info()
     return loc, rot
+
 
 def _get_selected_asset():
     assets = unreal.EditorUtilityLibrary.get_selected_assets()
     return assets[0] if assets else None
 
+
 def place_from_viewport(distance_cm=120.0, up_offset_cm=0.0):
-    world = unreal.EditorLevelLibrary.get_editor_world()
     asset = _get_selected_asset()
     if not asset:
         unreal.log_warning("No asset selected in Content Browser")
@@ -18,7 +21,7 @@ def place_from_viewport(distance_cm=120.0, up_offset_cm=0.0):
     cam_loc, cam_rot = _get_viewport_cam()
     fwd = cam_rot.get_forward_vector()
 
-    spawn_loc = cam_loc + fwd * distance_cm + unreal.Vector(0,0,up_offset_cm)
+    spawn_loc = cam_loc + fwd * distance_cm + unreal.Vector(0, 0, up_offset_cm)
     spawn_rot = unreal.Rotator(cam_rot.pitch, cam_rot.yaw, 0.0)
 
     actor = None
@@ -39,6 +42,7 @@ def place_from_viewport(distance_cm=120.0, up_offset_cm=0.0):
         unreal.log("Spawned via Python at {}".format(spawn_loc))
     else:
         unreal.log_warning("Unsupported asset type: {}".format(type(asset)))
+
 
 def _add_toolbar_button():
     menus = unreal.ToolMenus.get()
@@ -63,6 +67,7 @@ def _add_toolbar_button():
     section.add_entry(entry)
     menus.refresh_all_widgets()
 
+
 def _add_context_menu():
     menus = unreal.ToolMenus.get()
     for path in ["ContentBrowser.AssetContextMenu",
@@ -83,6 +88,7 @@ def _add_context_menu():
         )
         section.add_entry(entry)
     menus.refresh_all_widgets()
+
 
 # 에디터 시작 시 한 번 등록
 _add_toolbar_button()
